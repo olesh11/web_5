@@ -7,13 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "postinstall": "npm rebuild lightningcss"
+    "preview": "vite preview"
   },
   "dependencies": {
     "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "lightningcss": "^1.25.0"
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -27,6 +25,6 @@
     "vite": "^7.3.1"
   },
   "engines": {
-    "node": "24.x"
+    "node": "18.x"
   }
 }
