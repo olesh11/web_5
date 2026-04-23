@@ -10,442 +10,400 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ===== ЗМІННІ ТЕМ (Світла / Темна) ===== */
+    /* ===== ТЕМИ ===== */
     :root {
-      --page-bg: #f5f5f9;
-      --card-bg: #ffffff;
-      --sidebar-bg: #fafafa;
-      --text-main: #1e1e24;
-      --text-muted: #6b7280;
-      --accent: #5a4bda; /* Фіолетово-синій зі скріна */
+      --bg: #f0f4f8;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --accent: #4f46e5;
       --accent-light: #eef2ff;
-      --border-color: #e5e7eb;
-      --timeline-dot: #d1d5db;
+      --border: #e2e8f0;
+      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+      --header-bg: linear-gradient(135deg, #312e81 0%, #4f46e5 100%);
+      --tag-bg: #eef2ff;
+      --tag-text: #3730a3;
+      --footer-bg: #1e293b;
+      --footer-text: #94a3b8;
     }
 
     [data-theme="night"] {
-      --page-bg: #121212;
-      --card-bg: #1e1e1e;
-      --sidebar-bg: #2a2a2a;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
       --accent: #818cf8;
-      --accent-light: #3730a3;
-      --border-color: #3f3f46;
-      --timeline-dot: #52525b;
+      --accent-light: #1e1b4b;
+      --border: #334155;
+      --shadow: 0 4px 24px rgba(0,0,0,0.4);
+      --header-bg: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      --tag-bg: #1e1b4b;
+      --tag-text: #a5b4fc;
+      --footer-bg: #020617;
+      --footer-text: #64748b;
     }
 
+    /* ===== БАЗА ===== */
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--page-bg);
-      color: var(--text-main);
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.4s ease, color 0.4s ease;
       line-height: 1.6;
-      transition: background-color 0.3s, color 0.3s;
-      padding: 2rem 1rem;
     }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem 3rem; }
 
     /* ===== КНОПКА ТЕМИ ===== */
-    .theme-toggle {
+    .theme-btn {
       position: fixed;
-      top: 1rem; right: 1rem;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 0.5rem 1rem;
-      border-radius: 50px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 500;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      top: 1.2rem;
+      right: 1.5rem;
       z-index: 100;
-    }
-
-    /* ===== ГОЛОВНИЙ КОНТЕЙНЕР ===== */
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      background: var(--card-bg);
-      border-radius: 1rem;
-      padding: 3rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-    }
-
-    /* ===== HEADER ===== */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 3rem;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 1.5rem;
-    }
-    .header-left h1 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      line-height: 1.2;
-    }
-    .header-left h1 span { color: var(--accent); }
-    .header-left .subtitle {
-      color: var(--text-muted);
-      font-weight: 500;
-      font-size: 0.95rem;
-      margin-top: 0.5rem;
-    }
-    .header-right {
-      text-align: right;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      color: var(--text);
+      border-radius: 50px;
+      padding: 0.45rem 1.1rem;
       font-size: 0.85rem;
-      color: var(--text-muted);
       font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
     }
-    .header-right div { margin-bottom: 0.2rem; }
+    .theme-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); transform: translateY(-2px); }
 
-    /* ===== GRID LAYOUT ===== */
-    .content-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 3rem;
-    }
-    @media (max-width: 768px) {
-      .content-grid { grid-template-columns: 1fr; }
-      header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-      .header-right { text-align: left; }
-    }
-
-    /* ===== ЗАГОЛОВКИ СЕКЦІЙ ===== */
-    .section-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 1.5rem;
-    }
-
-    /* ===== ЛІВА КОЛОНКА (Досвід) ===== */
-    .about-text {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-bottom: 3rem;
-    }
-
-    .timeline {
-      border-left: 1px solid var(--border-color);
-      padding-left: 1.5rem;
-      margin-left: 0.5rem;
-    }
-    .timeline-item {
-      position: relative;
+    /* ===== ХЕДЕР ===== */
+    header {
+      background: var(--header-bg);
+      color: #fff;
+      padding: 3rem 2.5rem 2.5rem;
+      border-radius: 0 0 2rem 2rem;
       margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
     }
-    .timeline-item::before {
+    header::before {
       content: '';
       position: absolute;
-      left: -1.8rem;
-      top: 0.2rem;
-      width: 0.6rem;
-      height: 0.6rem;
+      top: -40px; right: -40px;
+      width: 220px; height: 220px;
+      background: rgba(255,255,255,0.06);
       border-radius: 50%;
-      background: var(--card-bg);
-      border: 2px solid var(--timeline-dot);
     }
-    .timeline-role {
-      font-size: 0.75rem;
-      color: var(--text-muted);
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: 30%;
+      width: 300px; height: 300px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    header h1 { font-size: 2.4rem; font-weight: 700; margin-bottom: 0.3rem; position: relative; z-index: 1; }
+    header h1 span { color: #a5b4fc; }
+    header .subtitle { font-size: 1rem; opacity: 0.85; margin-bottom: 1.2rem; position: relative; z-index: 1; }
+    header .contacts { display: flex; flex-wrap: wrap; gap: 1rem; position: relative; z-index: 1; }
+    header .contacts span {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.82rem;
+      backdrop-filter: blur(4px);
+    }
+
+    /* ===== СЕКЦІЇ ===== */
+    .section-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--accent);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.3rem;
+      letter-spacing: 0.12em;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
     }
-    .timeline-item h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ===== КАРТКИ ===== */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: background 0.4s ease, border-color 0.4s ease;
+    }
+
+    /* ===== ДОСВІД ===== */
+    .experience-item { padding: 1.2rem 0; border-bottom: 1px solid var(--border); }
+    .experience-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .experience-item h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .experience-item .role-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 500;
       margin-bottom: 0.5rem;
     }
-    .timeline-item p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
+    .experience-item p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
 
-    /* ===== ПРАВА КОЛОНКА (Сайдбар) ===== */
-    .sidebar {
-      background: var(--sidebar-bg);
-      padding: 2rem;
-      border-radius: 1rem;
-    }
-    .sidebar-group { margin-bottom: 2rem; }
-    .sidebar-subtitle {
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 0.8rem;
-      color: var(--text-main);
-    }
-    .tags-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
+    /* ===== НАВИЧКИ ===== */
+    .skills-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .tag {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      padding: 0.3rem 0.8rem;
+      background: var(--tag-bg);
+      color: var(--tag-text);
       border-radius: 50px;
-      font-size: 0.75rem;
+      padding: 0.3rem 0.85rem;
+      font-size: 0.78rem;
       font-weight: 500;
-      color: var(--text-muted);
+      transition: background 0.3s;
     }
+
+    /* ===== МОВИ ===== */
     .lang-item {
-      font-size: 0.85rem;
-      margin-bottom: 0.4rem;
-      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
     }
-    .lang-item span { color: var(--text-muted); }
-
-    /* ===== ВІДГУКИ (Lab 4) ===== */
-    .reviews-section {
-      margin-top: 4rem;
-      border-top: 1px solid var(--border-color);
-      padding-top: 3rem;
-    }
-    .review-card {
-      background: var(--sidebar-bg);
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      margin-bottom: 1rem;
-    }
-    .review-author { font-weight: 600; font-size: 0.9rem; color: var(--accent); }
-    .review-email { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem; }
-    .review-body { font-size: 0.9rem; color: var(--text-main); }
-
-    /* ===== ФУТЕР (SysInfo - Lab 4) ===== */
-    footer {
-      margin-top: 4rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--border-color);
-    }
-    .footer-copy {
+    .lang-item:last-child { border-bottom: none; }
+    .lang-level {
       font-size: 0.75rem;
-      color: var(--text-muted);
+      color: var(--muted);
+      background: var(--tag-bg);
+      padding: 0.2rem 0.6rem;
+      border-radius: 50px;
+    }
+
+    /* ===== ДВОКОЛОНКОВИЙ ГРІД ===== */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ===== ФОРМА ===== */
+    .form-group { margin-bottom: 1rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 1.5rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
     }
-    .sysinfo-grid {
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 0.6rem;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--accent); }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+    .btn-submit {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 0.6rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* ===== ФУТЕР ===== */
+    footer {
+      background: var(--footer-bg);
+      color: var(--footer-text);
+      padding: 2.5rem;
+      border-radius: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    footer .footer-copy { font-size: 0.85rem; margin-bottom: 1.2rem; }
+    .sys-info-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      background: var(--sidebar-bg);
-      padding: 1.5rem;
+      gap: 0.6rem;
+    }
+    .sys-info-item {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 0.5rem;
+      padding: 0.6rem 0.9rem;
     }
-    .sysinfo-item h4 { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
-    .sysinfo-item p { font-size: 0.85rem; color: var(--text-main); word-break: break-all; }
-
-    /* ===== МОДАЛЬНЕ ВІКНО (Lab 4) ===== */
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-      display: none; justify-content: center; align-items: center; z-index: 1000;
+    .sys-info-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(148,163,184,0.6);
+      margin-bottom: 0.2rem;
     }
-    .modal-overlay.active { display: flex; }
-    .modal-content {
-      background: var(--card-bg); padding: 2.5rem; border-radius: 1rem;
-      width: 90%; max-width: 450px; position: relative;
-    }
-    .close-btn {
-      position: absolute; top: 1rem; right: 1.5rem; font-size: 1.5rem;
-      cursor: pointer; color: var(--text-muted); background: none; border: none;
-    }
-    .modal-content h2 { margin-bottom: 1.5rem; font-size: 1.5rem; color: var(--accent); }
-    .form-group { margin-bottom: 1rem; }
-    .form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.3rem; }
-    .form-group input, .form-group textarea {
-      width: 100%; padding: 0.8rem; border: 1px solid var(--border-color);
-      border-radius: 0.5rem; background: var(--page-bg); color: var(--text-main);
-      font-family: inherit;
-    }
-    .submit-btn {
-      width: 100%; padding: 0.8rem; background: var(--accent); color: #fff;
-      border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;
-    }
+    .sys-info-value { font-size: 0.78rem; color: var(--footer-text); word-break: break-all; }
   </style>
 </head>
 <body>
 
-  <button class="theme-toggle" id="themeBtn">Тема: Авто</button>
+  <!-- Кнопка перемикання теми -->
+  <button class="theme-btn" id="theme-btn">
+    <span id="theme-icon">🌙</span>
+    <span id="theme-label">Нічний режим</span>
+  </button>
+
+  <!-- ХЕДЕР -->
+  <header>
+    <div class="container">
+      <h1>Олеш <span>Роман</span></h1>
+      <p class="subtitle">Manual QA Engineer / Спеціаліст з кібербезпеки</p>
+      <div class="contacts">
+        <span>📍 Львів, Україна</span>
+        <span>✉️ roman.olesh.kb.2023@lpnu.ua</span>
+      </div>
+    </div>
+  </header>
 
   <div class="container">
-    <header>
-      <div class="header-left">
-        <h1>Олеш <span>Роман</span></h1>
-        <p class="subtitle">— Manual QA Engineer / Cybersecurity</p>
+
+    <!-- ПРО МЕНЕ -->
+    <div class="card">
+      <p class="section-title">Про мене</p>
+      <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.7;">
+        Цілеспрямований фахівець із глибоким інтересом до комп'ютерних наук, операційних систем сімейства Linux та кібербезпеки. Маю практичний досвід у забезпеченні якості програмного забезпечення та аналізі мережевої безпеки.
+      </p>
+    </div>
+
+    <!-- ДОСВІД -->
+    <div class="card">
+      <p class="section-title">Досвід та практика</p>
+      <div class="experience-item">
+        <p class="role-label">QA Роль</p>
+        <h3>QA-тестувальник</h3>
+        <p>Забезпечення якості програмного забезпечення: розробка тестової документації, написання та виконання тест-кейсів. Практичний досвід аналізу шкідливого ПЗ на віртуальних машинах Linux.</p>
       </div>
-      <div class="header-right">
-        <div>roman.olesh.kb.2023@lpnu.ua</div>
-        <div>Львів, Україна</div>
-      </div>
-    </header>
-
-    <div class="content-grid">
-      <div>
-        <h2 class="section-title">Про мене</h2>
-        <p class="about-text">
-          Цілеспрямований фахівець із глибоким інтересом до комп'ютерних наук, операційних систем сімейства Linux та кібербезпеки. Фокусуюся на пошуку вразливостей та забезпеченні надійності програмних продуктів.
-        </p>
-
-        <h2 class="section-title">Досвід та практика</h2>
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-role">QA Роль</div>
-            <h3>QA-engineer</h3>
-            <p>Забезпечення якості ПЗ: розробка тестової документації, написання та виконання тест-кейсів.</p>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-role">Кібербезпека</div>
-            <h3>Аналіз мереж та ПЗ</h3>
-            <p>Робота з Wireshark, аналіз шкідливого ПЗ та налаштування Auditd для детектування підозрілої активності.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="sidebar">
-        <h2 class="section-title">Навички</h2>
-        
-        <div class="sidebar-group">
-          <div class="sidebar-subtitle">ОС</div>
-          <div class="tags-container">
-            <span class="tag">Linux (Ubuntu)</span>
-            <span class="tag">Kali Linux</span>
-            <span class="tag">Windows</span>
-          </div>
-        </div>
-
-        <div class="sidebar-group">
-          <div class="sidebar-subtitle">Інструменти</div>
-          <div class="tags-container">
-            <span class="tag">Wireshark</span>
-            <span class="tag">PGP</span>
-            <span class="tag">Git</span>
-            <span class="tag">HTML</span>
-            <span class="tag">Auditd</span>
-          </div>
-        </div>
-
-        <h2 class="section-title" style="margin-top: 3rem;">Володіння мовами</h2>
-        <div class="lang-item">Українська — <span>Рідна</span></div>
-        <div class="lang-item">Англійська — <span>Технічна</span></div>
+      <div class="experience-item">
+        <p class="role-label">Кібербезпека</p>
+        <h3>Аналіз мереж та ПЗ</h3>
+        <p>Робота з Wireshark, аналіз шкідливого ПЗ та налаштування Auditd для детектування підозрілої активності. Глибока робота з мережевим трафіком.</p>
       </div>
     </div>
 
-    <div class="reviews-section">
-      <h2 class="section-title">Відгуки (Fetch API)</h2>
-      <div id="reviews-container">
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Завантаження відгуків...</p>
+    <!-- НАВИЧКИ + МОВИ -->
+    <div class="two-col">
+      <div class="card">
+        <p class="section-title">Технічні навички</p>
+        <div class="skills-grid">
+          <span class="tag">Linux (Ubuntu, Kali)</span>
+          <span class="tag">Windows</span>
+          <span class="tag">Wireshark</span>
+          <span class="tag">PGP шифрування</span>
+          <span class="tag">Git</span>
+          <span class="tag">HTML / CSS</span>
+          <span class="tag">Аналіз шкідливого ПЗ</span>
+          <span class="tag">Auditd</span>
+        </div>
+      </div>
+      <div class="card">
+        <p class="section-title">Мови</p>
+        <div class="lang-item">
+          <span>🇺🇦 Українська</span>
+          <span class="lang-level">Рідна</span>
+        </div>
+        <div class="lang-item">
+          <span>🇬🇧 Англійська</span>
+          <span class="lang-level">Технічна</span>
+        </div>
       </div>
     </div>
 
+  </div>
+
+  <!-- ФУТЕР -->
+  <div class="container">
     <footer>
-      <div class="footer-copy">© 2026 CV — Олеш Роман</div>
-      <h2 class="section-title">Системна інформація (LocalStorage)</h2>
-      <div class="sysinfo-grid" id="sysinfo-container"></div>
+      <p class="footer-copy">© 2026 CV — Олеш Роман · Manual QA Engineer / Кібербезпека</p>
+      <p class="section-title" style="color: rgba(148,163,184,0.6); margin-bottom: 1rem;">Системна інформація (localStorage)</p>
+      <div class="sys-info-grid" id="sys-info"></div>
     </footer>
   </div>
 
-  <div class="modal-overlay" id="contactModal">
-    <div class="modal-content">
-      <button class="close-btn" id="closeModal">×</button>
-      <h2>Зв'язок зі мною</h2>
-      <form action="https://formspree.io/f/xgopqbgb" method="POST">
-        <div class="form-group">
-          <label>Ім'я</label>
-          <input type="text" name="name" required>
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" name="email" required>
-        </div>
-        <div class="form-group">
-          <label>Номер телефону</label>
-          <input type="tel" name="phone" required>
-        </div>
-        <div class="form-group">
-          <label>Повідомлення</label>
-          <textarea name="message" rows="3" required></textarea>
-        </div>
-        <button type="submit" class="submit-btn">Відправити</button>
-      </form>
-    </div>
-  </div>
-
   <script>
-    // 1. Системна інформація (LocalStorage)
+    /* ====== 1. LocalStorage — системна інформація ====== */
     const sysInfo = {
       userAgent: navigator.userAgent,
       platform: navigator.platform,
-      language: navigator.language
+      language: navigator.language,
+      cookies: navigator.cookieEnabled ? 'Увімкнені' : 'Вимкнені',
+      resolution: screen.width + ' × ' + screen.height,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     };
+
     localStorage.setItem('sysInfo', JSON.stringify(sysInfo));
 
-    const savedSysInfo = JSON.parse(localStorage.getItem('sysInfo'));
-    const sysContainer = document.getElementById('sysinfo-container');
-    sysContainer.innerHTML = Object.entries(savedSysInfo).map(([key, value]) => `
-      <div class="sysinfo-item">
-        <h4>${key}</h4>
-        <p>${value}</p>
+    const stored = JSON.parse(localStorage.getItem('sysInfo'));
+    const labels = {
+      userAgent: 'Браузер',
+      platform: 'Платформа',
+      language: 'Мова',
+      cookies: 'Cookies',
+      resolution: 'Роздільна здатність',
+      timezone: 'Часовий пояс',
+    };
+
+    const sysInfoDiv = document.getElementById('sys-info');
+    sysInfoDiv.innerHTML = Object.entries(stored).map(([key, val]) => `
+      <div class="sys-info-item">
+        <div class="sys-info-label">${labels[key] || key}</div>
+        <div class="sys-info-value">${val}</div>
       </div>
     `).join('');
 
-    // 2. Fetch API для відгуків (Варіант 27)
-    fetch('https://jsonplaceholder.typicode.com/posts/27/comments')
-      .then(response => response.json())
-      .then(comments => {
-        const reviewsContainer = document.getElementById('reviews-container');
-        reviewsContainer.innerHTML = comments.map(comment => `
-          <div class="review-card">
-            <div class="review-author">${comment.name}</div>
-            <div class="review-email">${comment.email}</div>
-            <div class="review-body">${comment.body}</div>
-          </div>
-        `).join('');
-      })
-      .catch(error => {
-        document.getElementById('reviews-container').innerHTML = '<p>Помилка завантаження.</p>';
-        console.error('Error fetching comments:', error);
-      });
+    /* ====== 4. Тема день / ніч ====== */
+    const html = document.documentElement;
+    const themeBtn = document.getElementById('theme-btn');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeLabel = document.getElementById('theme-label');
 
-    // 3. Модальне вікно (з'являється через 1 хвилину)
-    const modal = document.getElementById('contactModal');
-    const closeBtn = document.getElementById('closeModal');
-
-    setTimeout(() => {
-      modal.classList.add('active');
-    }, 60000); // 60000 мс = 1 хвилина
-
-    closeBtn.addEventListener('click', () => modal.classList.remove('active'));
-    modal.addEventListener('click', (e) => {
-      if(e.target === modal) modal.classList.remove('active');
-    });
-
-    // 4. Перемикач теми (День/Ніч)
-    const htmlEl = document.documentElement;
-    const themeBtn = document.getElementById('themeBtn');
-
-    function setTheme(theme) {
-      htmlEl.setAttribute('data-theme', theme);
-      themeBtn.textContent = theme === 'day' ? 'Тема: Денна ☀️' : 'Тема: Нічна 🌙';
+    function applyTheme(theme) {
+      html.setAttribute('data-theme', theme);
+      if (theme === 'night') {
+        themeIcon.textContent = '☀️';
+        themeLabel.textContent = 'Денний режим';
+      } else {
+        themeIcon.textContent = '🌙';
+        themeLabel.textContent = 'Нічний режим';
+      }
     }
 
-    // Автоматичне визначення при завантаженні
-    const currentHour = new Date().getHours();
-    if (currentHour >= 7 && currentHour < 21) {
-      setTheme('day');
-    } else {
-      setTheme('night');
-    }
+    // Автоматичне визначення теми по часу
+    const hour = new Date().getHours();
+    applyTheme((hour >= 7 && hour < 21) ? 'day' : 'night');
 
     // Ручне перемикання
     themeBtn.addEventListener('click', () => {
-      const currentTheme = htmlEl.getAttribute('data-theme');
-      setTheme(currentTheme === 'day' ? 'night' : 'day');
+      const current = html.getAttribute('data-theme');
+      applyTheme(current === 'night' ? 'day' : 'night');
     });
   </script>
+
 </body>
 </html>
